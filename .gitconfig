@@ -1,0 +1,42 @@
+[user]
+  name = Jack Veenstra
+  email = jack@ooyala.com
+
+[branch]
+  autosetuprebase = always
+
+[push]
+  default = tracking
+
+[core]
+  excludesfile = ~/.gitexcludes
+
+[fetch]
+  recurseSubmodules = true
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = true
+
+[alias]
+  s = status
+  d = diff
+  c = commit
+  ci = commit
+  a = add
+  sn = status --untracked=no
+  co = checkout
+  wc = whatchanged
+  l = log
+  lo = log --oneline
+  b = branch
+  br = branch
+  sub = submodule
+  sm = submodule
+  cp = cherry-pick
+  last = "!git log | head -n 1 | cut -c 8- | xargs echo -n | pbcopy"
+  bbad = bisect bad
+  bgood = bisect good

@@ -22,7 +22,7 @@ endif
 set runtimepath+=~/.vim/bundle/vim-pathogen
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
-set tags=${HOME}/ooyala/ofe/tags
+set tags=${HOME}/repos/ooyala/ofe/tags
 
 " ====================
 " Plugin Options

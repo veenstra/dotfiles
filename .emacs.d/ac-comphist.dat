@@ -1,0 +1,94 @@
+((("find_by_id" .
+   [1 0 0 0 0 0 0 0 0 0])
+  ("HyperSyndication" .
+   [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0])
+  ("find_syndication_by_id_or_public_id" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("default_page_size" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("DEFAULT_PAGE_SIZE" .
+   [0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0])
+  ("syndication" .
+   [5 0 0 0 0 0 0 0 0 0 0])
+  ("S" .
+   [1])
+  ("xfe" .
+   [2 0 0])
+  ("query_duration" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("sleep" .
+   [1 0 0 0 0])
+  ("path_info" .
+   [0 0 0 0 1 0 0 0 0])
+  ("request" .
+   [1 0 0 0 0 0 0])
+  ("unless" .
+   [1 0 0 0 0 0])
+  ("elapsed" .
+   [1 0 0 0 0 0 0])
+  ("other" .
+   [3 0 0 0 0])
+  ("parse" .
+   [1 0 0 0 0])
+  ("JSON" .
+   [1 0 0 0])
+  ("response" .
+   [2 0 0 0 0 0 0 0])
+  ("stats" .
+   [4 0 0 0 0])
+  ("query" .
+   [1 0 0 0 0])
+  ("sql" .
+   [1 0 0])
+  ("puts" .
+   [4 0 0 0])
+  ("get" .
+   [2 0 0])
+  ("Helios" .
+   [1 0 0 0 0 0])
+  ("clear_sql_query_duration_total" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0])
+  ("clear_sql_query_count_total" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0])
+  ("sql_query_count_total" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0])
+  ("en" .
+   [2 0])
+  ("d" .
+   [1])
+  ("sql_query_duration_total" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0])
+  ("nil" .
+   [2 0 0])
+  ("clear_sql_query_count" .
+   [2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("delete" .
+   [2 0 0 0 0 0])
+  ("result" .
+   [2 0 0 0 0 0])
+  ("sql_query_count" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("sql_query_duration" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0])
+  ("display" .
+   [2 0 0 0 0 0 0])
+  ("message" .
+   [1 0 0 0 0 0 0])
+  ("nil?" .
+   [1 0 0 0])
+  ("primary_previews" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("stubs" .
+   [1 0 0 0 0])
+  ("with" .
+   [1 0 0 0])
+  ("returns" .
+   [1 0 0 0 0 0 0])
+  ("get_json" .
+   [2 0 0 0 0 0 0 0])
+  ("url" .
+   [1 0 0])
+  ("OOYALA_CODE_ROOT" .
+   [0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0])
+  ("install" .
+   [1 0 0 0 0 0 0])))

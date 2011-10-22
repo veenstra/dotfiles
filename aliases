@@ -1,15 +1,54 @@
+if [[ $(uname) == 'Linux' ]]; then
+  LS_COMMON="--color=auto"
+elif [[ $(uname) == 'Darwin' ]]; then
+  LS_COMMON="-Gh"
+fi
 alias a=alias
-alias ls='ls -F'
+alias ec='emacsclient --no-wait'
+alias ls='ls -F $LS_COMMON'
 alias la='ls -a'
 alias ll='ls -la'
 alias h=history
 alias gr=grep
+alias g=git
 alias l=less
 alias findx='find . -name "*.xml" -print0 | xargs -0 grep -H'
 alias findj='find . -name "*.java" -print0 | xargs -0 grep -H'
-alias findall='find . -type f -print0 | xargs -0 grep -H'
+alias findrb='find . -name "*.rb" -print0 | xargs -0 grep -H'
+alias findall='find . -type f -not -path "*/log/*" -not -path "*/[Tt][Aa][Gg][Ss]" -print0 | xargs -0 grep -H'
+alias findalllogs='find . -type f -print0 | xargs -0 grep -H'
 alias p=pushd
 alias o=popd
 alias null='cat > /dev/null'
 alias make-air="make-dbg backlot_air_inner && make-dbg backlot_air_outer && kill-fcsh"
 alias make-web="make-dbg ooyala_backlot_web && kill-fcsh"
+alias cl=clear
+alias gitme='git log --author=jack'
+alias gitme1='git log --author=jack --oneline'
+alias rur='rvm use ruby-1.8.7-p334'
+alias rus='rvm use system'
+alias rvmc='rvm current'
+alias my='mysql -uroot vstreams'
+alias mystaging='mysql -u helios -h masterdb.staging.ooyala.com -p vstreams'
+alias myprod='mysql -u helios -h dbslave12.us-ec2.ooyala.com -p vstreams'
+
+function title { echo -ne "\033]0;$1\007"; }
+function gitone {
+  local author=$1
+  if [ -z "$author" ]; then
+    author="jack"
+  fi
+  git log --oneline --author=$author;
+}
+
+function how {
+  grep -n --color=always $* ~/how.*
+}
+
+function how2 {
+  grep -n --color=always -A 1 $* ~/how.*
+}
+
+function how6 {
+  grep -n --color=always -B 1 -A 4 $* ~/how.*
+}
