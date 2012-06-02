@@ -1,14 +1,17 @@
 ;;;; -*- Emacs-Lisp -*- GNU Emacs Start-Up options
 
+(load-library "cl")
 (defvar emacslib "~/.emacs.d/cesar/"
   "Pathname of my private library")
 (setq load-path (append (list emacslib) load-path (list ".")))
+(setq load-path (cons "~/.emacs.d/lisp" load-path))
 
 (setq mac-option-key-is-meta nil)
 (setq mac-command-key-is-meta t)
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier nil)
 (setq make-backup-files nil)
+(setq truncate-partial-width-windows nil)
 
 (require 'server)
 (server-start)
@@ -41,7 +44,7 @@
 (setq-default compile-command		"time -p make -j8 ")
 (setq-default diff-switches		"-u")
 (setq-default indent-tabs-mode		t)
-(setq-default fill-column		78)
+(setq-default fill-column		80)
 
 ;;; Mode Hooks
 
@@ -53,6 +56,14 @@
 ;;(require 'xcscope)
 ;;(setq cscope-program "mlcscope")
 
+(setq rsense-home "/Users/jack/opt/rsense")
+(require 'rsense)
+
+(add-hook 'ruby-mode-hook
+          (lambda ()
+            (add-to-list 'ac-sources 'ac-source-rsense-method)
+            (add-to-list 'ac-sources 'ac-source-rsense-constant)))
+
 (autoload 'set-balanced-insertions "balanced-insertions" t nil)
 (autoload 'cq-buffer-menu "cq-buffer-menu-mode" t nil)
 (autoload 'cq-insert-braces "cq-c-mode" t nil)
@@ -61,7 +72,6 @@
 
 (add-hook 'awk-mode-hook
 	  (lambda ()
-            (common-cc-mode-hook-preamble)
             (setq c-basic-offset 2)
 	    (auto-fill-mode 1)
             (hs-minor-mode 1)
@@ -121,6 +131,11 @@
 	    (local-set-key "\C-\M-u"  'cq-backward-up-list-or-string)
 	    (local-set-key "\C-\M-d"  'cq-down-list)
 	    ))
+
+(add-hook 'js-mode-hook
+	  (lambda ()
+            (setq js-indent-level 2)
+	    (font-lock-mode 1)))
 
 (setq inferior-lisp-program "clisp")
 (add-hook 'ilisp-mode-hook
@@ -239,7 +254,7 @@
 (add-hook 'yacc-mode-hook                'cq-yacc-mode)
 
 ;;; For Text modes
-(add-hook 'text-mode-hook  	            'cq-text-mode)
+;(add-hook 'text-mode-hook  	            'cq-text-mode)
 (add-hook 'nroff-mode-hook 	            'cq-nroff-mode)
 (add-hook 'edit-picture-hook             'cq-picture-mode)
 (add-hook 'texinfo-mode-hook	            'cq-texinfo-mode)
@@ -476,9 +491,7 @@
 ;;;end .emacs-shared, loaded from ~/.emacs.d/init.el, ~/.xemacs/init.el
 
 
-(load-library "cl")
-(setq load-path (cons "~/.emacs.d/lisp" load-path))
-(setq load-path (cons "~/.emacs.d/cesar" load-path))
+;(load-library "cl")
 
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "/Users/jack/.emacs.d/lisp/ac-dict")
@@ -487,15 +500,21 @@
 (require 'template)
 (template-initialize)
 
+(require 'coffee-mode)
+(add-to-list 'auto-mode-alist '("\\.coffee\\.erb$" . coffee-mode))
+(add-to-list 'auto-mode-alist '("\\.scss$" . css-mode))
+
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
+(add-to-list 'auto-mode-alist '("\\.html\\.erb$" . html-mode))
+
 (autoload 'ruby-mode "ruby-mode" "Major mode for ruby files" t)
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
 (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
 (require 'ruby-electric)
-
-(add-to-list 'auto-mode-alist '("\\.erb$" . html-mode))
+(add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
 
 (cond ((and (string-match "^GNU Emacs" (emacs-version))
             (>= emacs-major-version 21)
@@ -542,7 +561,7 @@ Goes backward if ARG is negative; error if CHAR not found."
        ;; (require 'slime)
        ;; (slime-setup)
 
-       (require 'org-install)
+       ;(require 'org-install)
        (add-to-list 'auto-mode-alist (cons "\\.org$" 'org-mode))
        (global-set-key "\C-cl" 'org-store-link)
        (global-set-key "\C-ca" 'org-agenda)
@@ -645,6 +664,13 @@ Goes backward if ARG is negative; error if CHAR not found."
        (set-color-theme-solarized-light)
        (set-default-xtitle))
 
+;; This keyboard macro replaces a selected region of text with "<% t :amp_wordsHighlighted %>"
+;; and adds the line "amp_wordsHighlighted = Words Highlighted" to the end of
+;; the other buffer (where "Words Highlighted" are the words in the selected region).
+(fset 'macro-t
+   [?\C-w ?\C-x ?o ?\M-> return ?\C-y ?\C-a ?a ?m ?p ?_ ?\M-l ?\M-x ?r ?e ?p ?l tab ?r ?e ?g ?e tab return ?  return return ?\C-e ?  ?= ?  ?\C-y ?\C-a ?\C-  ?\M-f ?\M-f ?\M-w ?\C-x ?o ?< ?% ?= ?  ?t ?  ?: ?\C-y ?  ?% ?>])
+
+
 ;;;end ~/.emacs -- don't edit beyond
 
 (custom-set-variables
@@ -659,7 +685,7 @@ Goes backward if ARG is negative; error if CHAR not found."
  '(compilation-scroll-output t)
  '(compile-command "time -p make -j8 ")
  '(current-language-environment "Latin-1")
- '(default-frame-alist (quote ((width . 90) (height . 40) (menu-bar-lines . 1) (tool-bar-lines . 0))))
+ '(default-frame-alist (quote ((width . 90) (height . 40) (menu-bar-lines . 1))))
  '(default-input-method "latin-9-prefix")
  '(dired-dwim-target t)
  '(dired-isearch-filenames (quote dwim))
@@ -701,8 +727,9 @@ Goes backward if ARG is negative; error if CHAR not found."
  '(shell-pushd-regexp "pushd\\|+")
  '(show-trailing-whitespace t)
  '(tab-always-indent (quote complete))
- '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
+ '(text-mode-hook (quote (text-mode-hook-identify)))
  '(tool-bar-mode nil nil (tool-bar))
+ '(transient-mark-mode t)
  '(truncate-lines nil)
  '(use-file-dialog nil))
 (custom-set-faces
