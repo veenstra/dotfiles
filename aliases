@@ -4,7 +4,11 @@ elif [[ $(uname) == 'Darwin' ]]; then
   LS_COMMON="-Gh"
 fi
 alias a=alias
+alias be='bundle exec'
+alias ybe='yes | bundle exec'
+alias bi='bundle install'
 alias ec='emacsclient --no-wait'
+alias ep=emacs-pipe.pl
 alias ls='ls -F $LS_COMMON'
 alias la='ls -a'
 alias ll='ls -la'
@@ -12,11 +16,13 @@ alias h=history
 alias gr=grep
 alias g=git
 alias l=less
-alias findx='find . -name "*.xml" -print0 | xargs -0 grep -H'
-alias findj='find . -name "*.java" -print0 | xargs -0 grep -H'
-alias findrb='find . -name "*.rb" -print0 | xargs -0 grep -H'
-alias findall='find . -type f -not -path "*/log/*" -not -path "*/[Tt][Aa][Gg][Ss]" -print0 | xargs -0 grep -H'
-alias findalllogs='find . -type f -print0 | xargs -0 grep -H'
+alias findx='find . -name "*.xml" -print0 | xargs -0 grep -Hns'
+alias findj='find . -name "*.java" -print0 | xargs -0 grep -Hns'
+alias findrb='find . \( -name "*.rb" -or -name "*akefile" -or -name "*.erb" \) -print0 | xargs -0 grep -Hns'
+alias findcss='find . \( -name "*.css" -or -name "*.scss" \) -print0 | xargs -0 grep -Hns'
+alias findf='find . -type f -not -path "*/.git/*" -not -path "*/log/*" -not -path "*/logs/*" -not -path "*/[Tt][Aa][Gg][Ss]" -print0 | xargs -0 grep -Hns'
+alias findall='find . -not -path "*/.git/*" -not -path "*/log/*" -not -path "*/logs/*" -not -path "*/[Tt][Aa][Gg][Ss]" -print0 | xargs -0 grep -Hns'
+alias findalllogs='find . -type f -print0 | xargs -0 grep -Hns'
 alias p=pushd
 alias o=popd
 alias null='cat > /dev/null'
@@ -25,12 +31,24 @@ alias make-web="make-dbg ooyala_backlot_web && kill-fcsh"
 alias cl=clear
 alias gitme='git log --author=jack'
 alias gitme1='git log --author=jack --oneline'
-alias rur='rvm use ruby-1.8.7-p334'
-alias rus='rvm use system'
-alias rvmc='rvm current'
+#alias rur='rvm use ruby-1.8.7-p334'
+#alias rus='rvm use system'
+#alias rvmc='rvm current'
+alias rbv='rbenv versions'
+alias rbwhich='rbenv which'
+alias rbhash='rbenv hash'
 alias my='mysql -uroot vstreams'
-alias mystaging='mysql -u helios -h masterdb.staging.ooyala.com -p vstreams'
-alias myprod='mysql -u helios -h dbslave12.us-ec2.ooyala.com -p vstreams'
+alias mys='mysql -uroot vstreams -e'
+alias mynext='mysql -u helios -h slavedb.next-staging.ooyala.com -p vstreams'
+alias mynextm='mysql -u helios -h masterdb.next-staging.ooyala.com -p vstreams'
+alias mystaging='mysql -u helios -h slavedb.staging.ooyala.com -p vstreams'
+alias mystagingm='mysql -u helios -h masterdb.staging.ooyala.com -p vstreams'
+alias myprod='mysql -u helios -h slavedb5.us-east-1.ooyala.com -p vstreams'
+alias myprodm='mysql -u helios -h masterdb.us-east-1.ooyala.com -p vstreams'
+alias dbpass='grep db_password $OO_DEPLOY_DIR/helios_secure.rb'
+
+alias rjoin='ruby -e "puts ARGF.readlines.map {|line| line.chomp}.join(\",\")"'
+alias rsum='ruby -e "lines = ARGF.readlines; puts lines.reduce(0) { |sum,line| sum + line.chomp.to_i}"'
 
 function title { echo -ne "\033]0;$1\007"; }
 function gitone {
@@ -42,13 +60,58 @@ function gitone {
 }
 
 function how {
-  grep -n --color=always $* ~/how.*
+  grep -n --color=always $* ~/how/*
 }
 
 function how2 {
-  grep -n --color=always -A 1 $* ~/how.*
+  grep -n --color=always -A 1 $* ~/how/*
+}
+
+function how3 {
+  grep -n --color=always -B 1 -A 1 $* ~/how/*
 }
 
 function how6 {
-  grep -n --color=always -B 1 -A 4 $* ~/how.*
+  grep -n --color=always -B 1 -A 4 $* ~/how/*
+}
+
+function lhow {
+  less ~/how/$1
+}
+
+function china {
+  mysql -uroot vstreams -e "select id,embed_code,unhex(hex(name)) from movies where unhex(hex(name)) like '%$1%' and provider_id=16307"
+}
+
+function myuser {
+  # Try matching the given arg as a user id first, then as a user email.
+  output=`mysql -uroot vstreams -t -e "select users.id as user_id,email,users.permission as perm,api_key,provider_id as prov_id,pcode,package_id,processing_profile_id as pp_id,reseller_id as r_id from users,providers,packages where users.id=$1 and provider_id=providers.id and providers.package_id=packages.id" 2>/dev/null`
+  if [ -n "$output" ]; then
+    echo "$output"
+  else
+    mysql -uroot vstreams -e "select users.id as user_id,email,users.permission as perm,api_key,provider_id as prov_id,pcode,package_id,processing_profile_id as pp_id,reseller_id as r_id from users,providers,packages where users.email like '$1' and provider_id=providers.id and providers.package_id=packages.id"
+  fi
+}
+
+function myprov {
+  # Try matching the provider id first, then pcode
+  output=`mysql -uroot vstreams -t -e "select users.id as user_id,email,users.permission as perm,provider_id as prov_id,master_provider_id as mstr_id,pcode,package_id,processing_profile_id as pp_id,reseller_id as r_id from users,providers,packages where providers.id=$1 and provider_id=providers.id and providers.package_id=packages.id" 2>/dev/null`
+  if [ -n "$output" ]; then
+    echo "$output"
+  else
+    mysql -uroot vstreams -t -e "select users.id as user_id,email,users.permission as perm,provider_id as prov_id,master_provider_id as mstr_id,pcode,package_id,processing_profile_id as pp_id,reseller_id as r_id from users,providers,packages where providers.pcode=\"$1\" and provider_id=providers.id and providers.package_id=packages.id"
+  fi
+}
+
+function myreseller {
+  mysql -uroot vstreams -t -e "select users.id as user_id,users.permission as perm,email,providers.id as prov_id,master_provider_id as m_prov_id,pcode,status,reseller_id as r_id,resellers.public_id from users,providers,packages,resellers where users.provider_id=providers.id and providers.package_id=packages.id and packages.reseller_id=resellers.id and reseller_id=$1"
+}
+
+function mypp {
+  output=`mysql -uroot vstreams -t -e "select id,processing_profile_name as pp_name, processing_profile as pprofile, reseller_id as rslr_id, public_id, is_private from processing_profiles where id=$1" 2>/dev/null`
+  if [ -n "$output" ]; then
+    echo "$output"
+  else
+    mysql -uroot vstreams -t -e "select id,processing_profile_name as pp_name, processing_profile as pprofile, reseller_id as rslr_id, public_id, is_private from processing_profiles where public_id=\"$1\""
+  fi
 }

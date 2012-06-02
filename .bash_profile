@@ -10,7 +10,7 @@ fi
 # User specific environment and startup programs
 
 PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:$PATH:.
-PATH=$PATH:$HOME/packages/rsense-0.3/bin
+PATH=$PATH:$HOME/opt/rsense/bin
 
 # Conditional additions
 if [ -d /Developer/Tools ];then
@@ -61,22 +61,27 @@ if [ -f /opt/local/etc/bash_completion ]; then
   . /opt/local/etc/bash_completion
 fi
 
-export OOYALA_CODE_ROOT=$HOME/repos/ooyala
-export BACKLOT_CODE_ROOT=$HOME/repos/backlot
+# Use REPO_ROOT in scripts
+export REPO_ROOT=$HOME/repos
+export OOYALA_REPO_ROOT=$REPO_ROOT
+export OOYALA_CODE_ROOT=$REPO_ROOT/ooyala
+export BACKLOT_CODE_ROOT=$REPO_ROOT/backlot
 # hadoop/youtube_exporter/dist/Capfile needs OOYALA_REPO set
 export OOYALA_REPO=$OOYALA_CODE_ROOT
 export OO_DEPLOY_DIR=$HOME/ooyala_private
 # Don't need this anymore
 #export RUBYLIB=${OOYALA_CODE_ROOT}/vendor/thrift/lib/rb/lib:${OOYALA_CODE_ROOT}/vendor/thrift/lib/rb/ext-darwin-i686
-export RUBYOPT="-I. -rubygems"
+export RUBYOPT="-r rubygems"
 PATH=$OOYALA_CODE_ROOT/ofe/tools/smithy/smithy-bin:$PATH
-export FLEX_HOME=/Applications/Adobe\ Flex\ Builder\ 3/sdks/flex_sdk_4.1.0.16076
+# export FLEX_HOME=/Applications/Adobe\ Flex\ Builder\ 3/sdks/flex_sdk_4.1.0.16076
+#export FLEX_HOME=/Applications/Adobe\ Flash\ Builder\ 4.6/sdks/4.5.1
+export FLEX_HOME=/Applications/Adobe\ Flash\ Builder\ 4.6/sdks/4.1.0
 PATH=$FLEX_HOME/bin:$PATH
 
 # ====================
 # EDITOR and  PAGER
 # ====================
-export EDITOR=vim
+export EDITOR=emacsclient
 export PAGER="less -eiMRswX"
 export LESS="-eiMRswX"
 export MANPAGER=$PAGER
@@ -87,6 +92,9 @@ export MANPAGER=$PAGER
 export LSCOLORS=exfxcxdxbxegedabagacad
 export LS_COLORS="ex=31:di=36:ln=35"
 export LS_COMMON=-G
+
+# Rsense (ruby mode for emacs)
+export RSENSE_HOME=$HOME/opt/rsense
 
 # ====================
 # Bash Completion
@@ -134,15 +142,14 @@ function prompt_fancy {
   # Shows a "%" next to the branch name if you have untracked files
   export GIT_PS1_SHOWUNTRACKEDFILES=1
   # Put it all together
-  if type -p __git_ps1; then
-    PS1="${DARK_BLUE}\w${DARK_GREEN}"'$(__git_ps1 "(%s)")'"${WHITE}\n\\$ "
-  else
-    PS1="${DARK_BLUE}\w$${WHITE}\n\\$ "
-  fi
+#  if type -p __git_ps1; then
+#    PS1="${DARK_BLUE}\w${DARK_GREEN}"'$(__git_ps1 "(%s)")'"${WHITE}\n\\$ "
+#  else
+    PS1="${DARK_BLUE}\w${WHITE}\n\\$ "
+#  fi
   PS2="> "
 }
 prompt_fancy
 
-# for rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
-
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
