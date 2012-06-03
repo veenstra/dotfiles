@@ -50,6 +50,12 @@ alias dbpass='grep db_password $OO_DEPLOY_DIR/helios_secure.rb'
 alias rjoin='ruby -e "puts ARGF.readlines.map {|line| line.chomp}.join(\",\")"'
 alias rsum='ruby -e "lines = ARGF.readlines; puts lines.reduce(0) { |sum,line| sum + line.chomp.to_i}"'
 
+source $HOME/todo/todo_completion
+alias t="todo.sh -t -d $HOME/todo/todo.cfg"
+complete -F _todo t
+export TODOTXT_DEFAULT_ACTION=ls
+
+
 function title { echo -ne "\033]0;$1\007"; }
 function gitone {
   local author=$1

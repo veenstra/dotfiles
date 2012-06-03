@@ -25,7 +25,7 @@ if [ -d ~/.bash_completion.d ]; then
         . "$c"
     done
 fi
-. ~/bin/z.sh
+#. ~/bin/z.sh
 #export CDPATH=".:~:~/repos/ooyala/ofe:~/repos"
 
 export BASH_ENV ENV PATH PS1 DISPLAY
